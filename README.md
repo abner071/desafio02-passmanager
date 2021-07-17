@@ -1,3 +1,3 @@
 # Passmanager
 
-Desafio principal do Chapter II do Ignite - Rocketseat
+Desafio do Chapter II do Ignite - Rocketseat

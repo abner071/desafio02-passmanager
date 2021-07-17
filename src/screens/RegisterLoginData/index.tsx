@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+import { useStorageData } from '../../hooks/storage';
 
 import { Input } from '../../components/Form/Input';
 import { Button } from '../../components/Form/Button';
@@ -40,32 +41,17 @@ export function RegisterLoginData() {
     resolver: yupResolver(schema)
   });
 
+  const { setItem } = useStorageData();
 
   async function handleRegister(formData: FormData) {
-    const dataKey = "@passmanager:logins";
-
     const newLoginData = {
       id: String(uuid.v4()),
       ...formData
     }
 
-    try {
-      const data = await AsyncStorage.getItem(dataKey);
-      const currentData = data ? JSON.parse(data) : [];
-      
-      const dataFormatted = [
-        ...currentData,
-        newLoginData
-      ];
+    await setItem(newLoginData);
 
-      await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));
-
-      reset();
-
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Não foi possível cadastrar o login");
-    }
+    reset();
   }
 
   return (
